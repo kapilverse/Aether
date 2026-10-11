@@ -1,32 +1,26 @@
-<p align="center">
-  <b>English</b> · <a href="#aether-100m-language-model">简体中文</a> · <a href="#aether-100m-language-model">繁體中文</a> · <a href="#aether-100m-language-model">日本語</a> · <a href="#aether-100m-language-model">한국어</a> · <a href="#aether-100m-language-model">Türkçe</a> · <a href="#aether-100m-language-model">Русский</a> · <a href="#aether-100m-language-model">Tiếng Việt</a> · <a href="#aether-100m-language-model">ไทย</a> · <a href="#aether-100m-language-model">Deutsch</a> · <a href="#aether-100m-language-model">Español</a> · <a href="#aether-100m-language-model">Français</a> · <a href="#aether-100m-language-model">Українська</a> · <a href="#aether-100m-language-model">Polski</a> · <a href="#aether-100m-language-model">Português (Brasil)</a> · <a href="#aether-100m-language-model">فارسی</a> · <a href="#aether-100m-language-model">العربية</a> · <a href="#aether-100m-language-model">Bahasa Indonesia</a> · <a href="#aether-100m-language-model">Italiano</a>
-</p>
-
----
-
 <h1 align="center">Aether: 100M Language Model</h1>
 
 <p align="center">
-  <b>An experimental ~100M decoder-only language model built and pretrained from scratch, then instruction fine-tuned with LoRA.</b>
+  <b>A 100M-parameter decoder-only language model built and pretrained from scratch, then instruction fine-tuned with LoRA.</b>
 </p>
 
 <p align="center">
-  Explore the end-to-end small language model lifecycle: tokenizer design, architecture, pretraining, LoRA fine-tuning, and empirical evaluations.
+  Complete small language model lifecycle: custom tokenization, modern Transformer architecture, pretraining, LoRA fine-tuning, and empirical evaluations.
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Parameters-100,092,672-2ea44f?style=flat-square" alt="Parameters">
-  <img src="https://img.shields.io/badge/Pretrained_Tokens-1.8B-0969da?style=flat-square" alt="Pretrained Tokens">
-  <img src="https://img.shields.io/badge/Architecture-Decoder--Only_Transformer-8957e5?style=flat-square" alt="Architecture">
+  <img src="https://img.shields.io/badge/Parameters-100M-2ea44f?style=flat-square" alt="Parameters">
+  <img src="https://img.shields.io/badge/Pretrained-1.8B_Tokens-0969da?style=flat-square" alt="Pretrained Tokens">
+  <img src="https://img.shields.io/badge/Architecture-Decoder--Only-8957e5?style=flat-square" alt="Architecture">
   <img src="https://img.shields.io/badge/Context_Length-2048-d97706?style=flat-square" alt="Context Window">
-  <img src="https://img.shields.io/badge/PyTorch-2.0+-ee4c2c?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch">
-  <img src="https://img.shields.io/badge/Weights-SafeTensors_&_PyTorch-059669?style=flat-square" alt="Weights">
-  <img src="https://img.shields.io/badge/Status-Research_Artifact-bc8cff?style=flat-square" alt="Research Artifact">
+  <img src="https://img.shields.io/badge/PyTorch-2.0-ee4c2c?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch">
+  <img src="https://img.shields.io/badge/Weights-SafeTensors-059669?style=flat-square" alt="Weights">
+  <img src="https://img.shields.io/badge/HuggingFace-kapilverse%2FAether-ffd21e?style=flat-square&logo=huggingface&logoColor=black" alt="Hugging Face">
 </p>
 
 <div align="center">
   <a href="#evaluation">
-    <img src="https://img.shields.io/badge/🏆_BEST_EVAL-45.64%25_Supervised_Accuracy_%7C_16.83_Perplexity-1f2937?style=for-the-badge&logoColor=white" alt="Top Benchmark Result"/>
+    <img src="https://img.shields.io/badge/Best_Eval-45.64%25_Supervised_Accuracy_%7C_16.83_Perplexity-1f2937?style=for-the-badge" alt="Top Benchmark Result"/>
   </a>
 </div>
 
@@ -57,12 +51,12 @@
       <td align="center" style="padding: 16px 32px;">
         <p align="center">
           <a href="https://huggingface.co/kapilverse/Aether">
-            <img src="https://img.shields.io/badge/🤗_Hugging_Face-Explore_Aether_Checkpoints-yellow?style=for-the-badge&logo=huggingface&logoColor=black" alt="Hugging Face"/>
+            <img src="https://img.shields.io/badge/Hugging_Face-Explore_Aether_Checkpoints-ffd21e?style=for-the-badge&logo=huggingface&logoColor=black" alt="Hugging Face"/>
           </a>
         </p>
         <p align="center">
-          <b><a href="https://huggingface.co/kapilverse/Aether">Join the Aether Model &amp; Research Discussion</a></b><br>
-          <sub>Checkpoints &bull; SafeTensors &bull; Evaluation Metrics &bull; Reproduction Scripts</sub>
+          <b><a href="https://huggingface.co/kapilverse/Aether">Explore Model Checkpoints &amp; Weights</a></b><br>
+          <sub>PyTorch Checkpoints &bull; SafeTensors &bull; Tokenizer &bull; Benchmark Metrics</sub>
         </p>
       </td>
     </tr>
@@ -72,7 +66,7 @@
 ---
 
 > [!NOTE]
-> **Status & Intended Use:** The training and fine-tuning pipelines ran successfully, and model weights are available. However, generation quality remains an expected limitation for this scale: outputs can be repetitive, incoherent, or incorrect. Aether is an educational and research artifact demonstrating end-to-end SLM engineering, not a production assistant.
+> **Status & Intended Use:** The training and fine-tuning pipelines ran successfully, and model weights are available. Generation quality reflects the expected capabilities of a 100M-scale model: outputs can exhibit repetition or factual limitations. Aether serves as a practical demonstration of end-to-end SLM engineering.
 
 ---
 
@@ -84,7 +78,7 @@
 4. **Instruction fine-tune with LoRA** across conversational, multi-turn, coding, and mathematical datasets.
 5. **Merge trained LoRA adapters** into standalone, self-contained model checkpoints.
 6. **Rigorously evaluate checkpoints** on held-out loss, perplexity, and next-token prediction metrics.
-7. **Empirically study generation dynamics**, repetitive degeneration, and EOS/stopping conditions.
+7. **Empirically study generation dynamics**, repetition mitigation, and EOS/stopping conditions.
 8. **Package and document artifacts** for open research and Hugging Face distribution.
 
 ---
@@ -255,7 +249,7 @@ Fine-tuning leveraged Low-Rank Adaptation (LoRA) on attention projection modules
 - **Motivation:** Standard SFT1 string tokenization did not append the special EOS token ID to assistant responses.
 - **Protocol:** Explicitly appended `tokenizer.sp.eos_id()` to assistant target labels.
 - **Merged Checkpoint:** `sft/merged/aether_100m_sft_eos.pt`
-- **Result:** Produced the **best loss, perplexity, and token accuracy** across all experiments.
+- **Result:** Produced the **best loss, perplexity, and token accuracy** across all fine-tuning runs.
 </details>
 
 ---
