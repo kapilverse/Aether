@@ -1,10 +1,10 @@
-# AETHER-100M
+# Aether
 
-**AETHER-100M** is an experimental, approximately 100-million-parameter decoder-only language model built and pretrained from scratch, then instruction-fine-tuned through multiple supervised fine-tuning (SFT) experiments.
+**Aether** is an experimental, approximately 100-million-parameter decoder-only language model built and pretrained from scratch, then instruction-fine-tuned through multiple supervised fine-tuning (SFT) experiments.
 
 The project covers the main stages of a small language model workflow: tokenizer use, transformer implementation, pretraining, LoRA-based supervised fine-tuning, adapter merging, evaluation, generation testing, checkpoint conversion, and preparation for publication on Hugging Face.
 
-> **Status:** The training and fine-tuning pipelines ran successfully, and the model weights are available. However, generation quality remains a known limitation: outputs can be repetitive, incoherent, or incorrect. AETHER-100M is an educational/research artifact, not a dependable production assistant.
+> **Status:** The training and fine-tuning pipelines ran successfully, and the model weights are available. However, generation quality remains a known limitation: outputs can be repetitive, incoherent, or incorrect. Aether is an educational/research artifact, not a dependable production assistant.
 
 ## Table of contents
 
@@ -39,7 +39,7 @@ The experiments show that supervised fine-tuning substantially improved held-out
 
 | Property | Value |
 |---|---|
-| Model name | AETHER-100M |
+| Model name | Aether |
 | Model type | Decoder-only causal language model |
 | Parameter count | 100,092,672 |
 | Pretraining tokens | 1,800,011,776 (approximately 1.8B) |
@@ -77,7 +77,7 @@ The model uses causal attention: each position is trained to predict the next to
 
 ### Important compatibility note
 
-AETHER-100M uses a custom model implementation. A checkpoint file and `config.json` do not, by themselves, make it a drop-in `transformers.AutoModelForCausalLM` model. The compatible architecture implementation and loading code are required unless a dedicated Transformers integration is implemented and tested.
+Aether uses a custom model implementation. A checkpoint file and `config.json` do not, by themselves, make it a drop-in `transformers.AutoModelForCausalLM` model. The compatible architecture implementation and loading code are required unless a dedicated Transformers integration is implemented and tested.
 
 ## Tokenizer and text format
 
@@ -319,9 +319,9 @@ A later EOS probability diagnostic compared predictions after several standalone
 | `sft/round3_checkpoints/final_adapter/adapter_model.pt` | SFT3 LoRA adapter |
 | `sft/eos_experiment_checkpoints/final_adapter/adapter_model.pt` | EOS experiment LoRA adapter |
 | `tokenizer/aether.model` | SentencePiece tokenizer |
-| `AETHER-100M-HF/model.safetensors` | Converted tensor weights for publication, if generated and verified |
-| `AETHER-100M-HF/config.json` | Architecture metadata for the publication package |
-| `AETHER-100M-HF/README.md` | Hugging Face model card |
+| `Aether-HF/model.safetensors` | Converted tensor weights for publication, if generated and verified |
+| `Aether-HF/config.json` | Architecture metadata for the publication package |
+| `Aether-HF/README.md` | Hugging Face model card |
 
 The `.pt` checkpoints and `.safetensors` weights are different serialization formats. Converting between them does not change model intelligence or improve outputs. The SafeTensors file must be produced from the intended checkpoint and verified before publication; do not assume it exists unless conversion completed successfully.
 
@@ -360,7 +360,7 @@ This is a representative layout based on the recorded experiments. A publication
 
 ## Using the model
 
-AETHER-100M uses a custom architecture. A working inference environment requires a compatible PyTorch version, SentencePiece, the architecture implementation, the tokenizer, and the checkpoint.
+Aether uses a custom architecture. A working inference environment requires a compatible PyTorch version, SentencePiece, the architecture implementation, the tokenizer, and the checkpoint.
 
 The original project used PyTorch with CUDA on an NVIDIA A10G GPU. Python 3.14.4 was present in the EC2 virtual environment used during the experiments; other Python versions and environments should be tested rather than assumed compatible.
 
@@ -406,7 +406,7 @@ The repository should include a tested end-to-end inference script before it is 
 A useful custom-model repository should include:
 
 ```text
-AETHER-100M/
+Aether/
 ├── README.md
 ├── config.json
 ├── model.safetensors
@@ -443,7 +443,7 @@ Do not claim exact reproducibility unless these details are available and tested
 
 ## Limitations and responsible use
 
-AETHER-100M is a small experimental language model. It can:
+Aether is a small experimental language model. It can:
 
 - Produce repetitive or incoherent text.
 - Generate incorrect factual claims.
@@ -465,6 +465,6 @@ If a dataset or its license cannot be verified, document the uncertainty and see
 
 ## Summary
 
-AETHER-100M completed a from-scratch pretraining run of approximately 1.8 billion tokens, followed by several LoRA-based supervised fine-tuning experiments. SFT1 substantially improved held-out token prediction, and explicit EOS supervision improved the recorded loss and token accuracy further. Nevertheless, free-form generation remained unreliable.
+Aether completed a from-scratch pretraining run of approximately 1.8 billion tokens, followed by several LoRA-based supervised fine-tuning experiments. SFT1 substantially improved held-out token prediction, and explicit EOS supervision improved the recorded loss and token accuracy further. Nevertheless, free-form generation remained unreliable.
 
 The project's value is its end-to-end engineering work and the measured lessons from the experiments: training success, improved token metrics, and useful assistant behavior are related but distinct outcomes.
