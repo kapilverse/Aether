@@ -1,0 +1,189 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#161b22"/>
+    </linearGradient>
+
+    <!-- Accent Gradient -->
+    <linearGradient id="accent-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#58a6ff"/>
+      <stop offset="50%" stop-color="#bc8cff"/>
+      <stop offset="100%" stop-color="#39d353"/>
+    </linearGradient>
+
+    <linearGradient id="panel-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#161b22"/>
+      <stop offset="100%" stop-color="#0e131a"/>
+    </linearGradient>
+
+    <!-- Drop Shadow -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <style>
+    .title { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-weight: 700; fill: #f0f6fc; }
+    .mono { font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, Menlo, monospace; }
+    .muted { fill: #8b949e; }
+    .accent { fill: #58a6ff; }
+    .purple { fill: #bc8cff; }
+    .green { fill: #3fb950; }
+    .orange { fill: #d29922; }
+    .cyan { fill: #39c5cf; }
+    .border { stroke: #30363d; stroke-width: 1; }
+    .code-text { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 12px; fill: #c9d1d9; }
+    .code-keyword { fill: #ff7b72; }
+    .code-string { fill: #a5d6ff; }
+    .code-fn { fill: #d2a8ff; }
+    .code-comment { fill: #8b949e; font-style: italic; }
+  </style>
+
+  <!-- Main Window Container -->
+  <rect x="20" y="20" width="960" height="520" rx="12" fill="url(#bg-grad)" filter="url(#shadow)" class="border"/>
+
+  <!-- Window Header Bar -->
+  <rect x="20" y="20" width="960" height="42" rx="12" fill="#161b22" class="border"/>
+  <!-- Mask bottom curve of header -->
+  <rect x="20" y="50" width="960" height="12" fill="#161b22"/>
+
+  <!-- Window Controls -->
+  <circle cx="45" cy="41" r="6" fill="#ff5f56"/>
+  <circle cx="65" cy="41" r="6" fill="#ffbd2e"/>
+  <circle cx="85" cy="41" r="6" fill="#27c93f"/>
+
+  <!-- Tab Title -->
+  <text x="500" y="45" text-anchor="middle" class="mono muted" font-size="13">aether_inference_pipeline.py — 100M SLM Architecture</text>
+
+  <!-- Left Column: Model Specs & Structure -->
+  <rect x="40" y="80" width="430" height="435" rx="8" fill="url(#panel-grad)" class="border"/>
+
+  <!-- Left Header -->
+  <text x="60" y="112" class="title" font-size="16">Architecture Topology</text>
+  <rect x="60" y="125" width="390" height="2" fill="url(#accent-grad)"/>
+
+  <!-- Architecture Badges & Stats -->
+  <g transform="translate(60, 145)">
+    <!-- Row 1 -->
+    <rect x="0" y="0" width="185" height="32" rx="6" fill="#21262d" class="border"/>
+    <text x="14" y="20" class="mono" font-size="11" fill="#8b949e">Parameters:</text>
+    <text x="100" y="20" class="mono cyan" font-weight="600" font-size="11">100,092,672</text>
+
+    <rect x="195" y="0" width="195" height="32" rx="6" fill="#21262d" class="border"/>
+    <text x="207" y="20" class="mono" font-size="11" fill="#8b949e">Tokens Pretrained:</text>
+    <text x="325" y="20" class="mono green" font-weight="600" font-size="11">~1.8B</text>
+
+    <!-- Row 2 -->
+    <rect x="0" y="40" width="185" height="32" rx="6" fill="#21262d" class="border"/>
+    <text x="14" y="60" class="mono" font-size="11" fill="#8b949e">Context Window:</text>
+    <text x="110" y="60" class="mono orange" font-weight="600" font-size="11">2,048 T</text>
+
+    <rect x="195" y="40" width="195" height="32" rx="6" fill="#21262d" class="border"/>
+    <text x="207" y="60" class="mono" font-size="11" fill="#8b949e">Vocab Size:</text>
+    <text x="285" y="60" class="mono purple" font-weight="600" font-size="11">32,000</text>
+  </g>
+
+  <!-- Architecture Flow Pipeline -->
+  <g transform="translate(60, 240)">
+    <text x="0" y="0" class="mono muted" font-size="11">TENSOR TRANSFORMATION PIPELINE</text>
+
+    <!-- Step 1 -->
+    <rect x="0" y="15" width="390" height="42" rx="6" fill="#1c2128" stroke="#388bfd" stroke-width="1"/>
+    <circle cx="20" cy="36" r="4" fill="#388bfd"/>
+    <text x="35" y="32" class="mono" font-size="12" fill="#f0f6fc">Token Embeddings (Tied)</text>
+    <text x="35" y="47" class="mono muted" font-size="10">Embedding dim: 768 | SentencePiece Tokenizer</text>
+    <text x="330" y="38" class="mono accent" font-size="11">dim=768</text>
+
+    <!-- Step 2 -->
+    <rect x="0" y="67" width="390" height="48" rx="6" fill="#1c2128" stroke="#bc8cff" stroke-width="1"/>
+    <circle cx="20" cy="91" r="4" fill="#bc8cff"/>
+    <text x="35" y="85" class="mono" font-size="12" fill="#f0f6fc">12x Decoder Blocks</text>
+    <text x="35" y="102" class="mono muted" font-size="10">GQA (12 Q-heads, 4 KV-heads) + RoPE + RMSNorm</text>
+    <text x="325" y="93" class="mono purple" font-size="11">12 Layers</text>
+
+    <!-- Step 3 -->
+    <rect x="0" y="125" width="390" height="42" rx="6" fill="#1c2128" stroke="#3fb950" stroke-width="1"/>
+    <circle cx="20" cy="146" r="4" fill="#3fb950"/>
+    <text x="35" y="142" class="mono" font-size="12" fill="#f0f6fc">SwiGLU Feed-Forward Network</text>
+    <text x="35" y="157" class="mono muted" font-size="10">Intermediate dim: 2,048 | No linear bias</text>
+    <text x="315" y="148" class="mono green" font-size="11">dim=2048</text>
+
+    <!-- Step 4 -->
+    <rect x="0" y="177" width="390" height="42" rx="6" fill="#1c2128" stroke="#d29922" stroke-width="1"/>
+    <circle cx="20" cy="198" r="4" fill="#d29922"/>
+    <text x="35" y="194" class="mono" font-size="12" fill="#f0f6fc">RMSNorm + Causal LM Head</text>
+    <text x="35" y="209" class="mono muted" font-size="10">Output Logits: [batch, seq_len, 32000]</text>
+    <text x="325" y="200" class="mono orange" font-size="11">32k Vocab</text>
+  </g>
+
+  <!-- Right Column: Interactive Code & Evaluation Benchmarks -->
+  <rect x="490" y="80" width="470" height="435" rx="8" fill="url(#panel-grad)" class="border"/>
+
+  <!-- Right Header -->
+  <text x="510" y="112" class="title" font-size="16">Evaluation &amp; Checkpoint Benchmark</text>
+  <rect x="510" y="125" width="430" height="2" fill="url(#accent-grad)"/>
+
+  <!-- Benchmark Table -->
+  <g transform="translate(510, 145)">
+    <!-- Header -->
+    <rect x="0" y="0" width="430" height="26" fill="#21262d" rx="4"/>
+    <text x="12" y="17" class="mono muted" font-size="11" font-weight="600">CHECKPOINT</text>
+    <text x="140" y="17" class="mono muted" font-size="11" font-weight="600">LOSS</text>
+    <text x="230" y="17" class="mono muted" font-size="11" font-weight="600">PERPLEXITY</text>
+    <text x="340" y="17" class="mono muted" font-size="11" font-weight="600">TOKEN ACC</text>
+
+    <!-- Row 1: Base -->
+    <text x="12" y="46" class="mono" font-size="11" fill="#c9d1d9">Base Pretrained</text>
+    <text x="140" y="46" class="mono" font-size="11" fill="#8b949e">6.8428</text>
+    <text x="230" y="46" class="mono" font-size="11" fill="#8b949e">937.15</text>
+    <text x="340" y="46" class="mono" font-size="11" fill="#8b949e">2.29%</text>
+    <line x1="0" y1="56" x2="430" y2="56" stroke="#21262d" stroke-width="1"/>
+
+    <!-- Row 2: SFT1 -->
+    <text x="12" y="76" class="mono" font-size="11" fill="#c9d1d9">SFT1 (UltraChat)</text>
+    <text x="140" y="76" class="mono" font-size="11" fill="#58a6ff">2.9120</text>
+    <text x="230" y="76" class="mono" font-size="11" fill="#58a6ff">18.39</text>
+    <text x="340" y="76" class="mono" font-size="11" fill="#58a6ff">44.41%</text>
+    <line x1="0" y1="86" x2="430" y2="86" stroke="#21262d" stroke-width="1"/>
+
+    <!-- Row 3: SFT2 -->
+    <text x="12" y="106" class="mono" font-size="11" fill="#c9d1d9">SFT2 (Mixed)</text>
+    <text x="140" y="106" class="mono" font-size="11" fill="#c9d1d9">2.9252</text>
+    <text x="230" y="106" class="mono" font-size="11" fill="#c9d1d9">18.63</text>
+    <text x="340" y="106" class="mono" font-size="11" fill="#c9d1d9">44.19%</text>
+    <line x1="0" y1="116" x2="430" y2="116" stroke="#21262d" stroke-width="1"/>
+
+    <!-- Row 4: SFT3 -->
+    <text x="12" y="136" class="mono" font-size="11" fill="#c9d1d9">SFT3 (Code/Math)</text>
+    <text x="140" y="136" class="mono" font-size="11" fill="#c9d1d9">2.9664</text>
+    <text x="230" y="136" class="mono" font-size="11" fill="#c9d1d9">19.42</text>
+    <text x="340" y="136" class="mono" font-size="11" fill="#c9d1d9">43.69%</text>
+    <line x1="0" y1="146" x2="430" y2="146" stroke="#21262d" stroke-width="1"/>
+
+    <!-- Row 5: SFT1_EOS (Best) -->
+    <rect x="0" y="152" width="430" height="26" fill="#1f3b2b" rx="4" stroke="#238636" stroke-width="1"/>
+    <text x="12" y="169" class="mono green" font-weight="700" font-size="11">★ SFT1_EOS (Best)</text>
+    <text x="140" y="169" class="mono green" font-weight="700" font-size="11">2.8229</text>
+    <text x="230" y="169" class="mono green" font-weight="700" font-size="11">16.83</text>
+    <text x="340" y="169" class="mono green" font-weight="700" font-size="11">45.64%</text>
+  </g>
+
+  <!-- Inference Python Code Snippet -->
+  <g transform="translate(510, 345)">
+    <rect x="0" y="0" width="430" height="150" rx="6" fill="#0d1117" class="border"/>
+    
+    <!-- Editor Header -->
+    <rect x="0" y="0" width="430" height="24" rx="6" fill="#161b22"/>
+    <text x="12" y="16" class="mono muted" font-size="10">inference_demo.py</text>
+
+    <!-- Code Lines -->
+    <text x="15" y="44" class="code-text"><tspan class="code-keyword">from</tspan> model <tspan class="code-keyword">import</tspan> AETHER100M</text>
+    <text x="15" y="62" class="code-text"><tspan class="code-keyword">from</tspan> safetensors.torch <tspan class="code-keyword">import</tspan> load_file</text>
+    <text x="15" y="80" class="code-text">model = AETHER100M().to(<tspan class="code-string">"cuda"</tspan>).eval()</text>
+    <text x="15" y="98" class="code-text">model.load_state_dict(load_file(<tspan class="code-string">"model.safetensors"</tspan>))</text>
+    <text x="15" y="116" class="code-text"><tspan class="code-comment"># Generate with SentencePiece tokenizer</tspan></text>
+    <text x="15" y="134" class="code-text">output = model.generate(prompt=<tspan class="code-string">"User: Explain gravity\nAssistant:"</tspan>)</text>
+  </g>
+</svg>

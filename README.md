@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/banner.png" alt="Aether: A Small Language Model Built From Scratch" width="100%">
+</p>
+
 <h1 align="center">Aether: 100M Language Model</h1>
 
 <p align="center">
