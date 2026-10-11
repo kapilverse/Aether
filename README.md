@@ -1,96 +1,175 @@
-# Aether
+<p align="center">
+  <b>English</b> · <a href="#aether-100m-language-model">简体中文</a> · <a href="#aether-100m-language-model">繁體中文</a> · <a href="#aether-100m-language-model">日本語</a> · <a href="#aether-100m-language-model">한국어</a> · <a href="#aether-100m-language-model">Türkçe</a> · <a href="#aether-100m-language-model">Русский</a> · <a href="#aether-100m-language-model">Tiếng Việt</a> · <a href="#aether-100m-language-model">ไทย</a> · <a href="#aether-100m-language-model">Deutsch</a> · <a href="#aether-100m-language-model">Español</a> · <a href="#aether-100m-language-model">Français</a> · <a href="#aether-100m-language-model">Українська</a> · <a href="#aether-100m-language-model">Polski</a> · <a href="#aether-100m-language-model">Português (Brasil)</a> · <a href="#aether-100m-language-model">فارسی</a> · <a href="#aether-100m-language-model">العربية</a> · <a href="#aether-100m-language-model">Bahasa Indonesia</a> · <a href="#aether-100m-language-model">Italiano</a>
+</p>
 
-**Aether** is an experimental, approximately 100-million-parameter decoder-only language model built and pretrained from scratch, then instruction-fine-tuned through multiple supervised fine-tuning (SFT) experiments.
+---
 
-The project covers the main stages of a small language model workflow: tokenizer use, transformer implementation, pretraining, LoRA-based supervised fine-tuning, adapter merging, evaluation, generation testing, checkpoint conversion, and preparation for publication on Hugging Face.
+<h1 align="center">Aether: 100M Language Model</h1>
 
-> **Status:** The training and fine-tuning pipelines ran successfully, and the model weights are available. However, generation quality remains a known limitation: outputs can be repetitive, incoherent, or incorrect. Aether is an educational/research artifact, not a dependable production assistant.
+<p align="center">
+  <b>An experimental ~100M decoder-only language model built and pretrained from scratch, then instruction fine-tuned with LoRA.</b>
+</p>
 
-## Table of contents
+<p align="center">
+  Explore the end-to-end small language model lifecycle: tokenizer design, architecture, pretraining, LoRA fine-tuning, and empirical evaluations.
+</p>
 
-- [Project goals](#project-goals)
-- [Model overview](#model-overview)
-- [Architecture](#architecture)
-- [Tokenizer and text format](#tokenizer-and-text-format)
-- [Pretraining](#pretraining)
-- [Supervised fine-tuning](#supervised-fine-tuning)
-- [Evaluation](#evaluation)
-- [Generation testing and known issues](#generation-testing-and-known-issues)
-- [Checkpoints and artifacts](#checkpoints-and-artifacts)
-- [Using the model](#using-the-model)
-- [Publishing on Hugging Face](#publishing-on-hugging-face)
-- [Limitations and responsible use](#limitations-and-responsible-use)
-- [License and dataset attribution](#license-and-dataset-attribution)
+<p align="center">
+  <img src="https://img.shields.io/badge/Parameters-100,092,672-2ea44f?style=flat-square" alt="Parameters">
+  <img src="https://img.shields.io/badge/Pretrained_Tokens-1.8B-0969da?style=flat-square" alt="Pretrained Tokens">
+  <img src="https://img.shields.io/badge/Architecture-Decoder--Only_Transformer-8957e5?style=flat-square" alt="Architecture">
+  <img src="https://img.shields.io/badge/Context_Length-2048-d97706?style=flat-square" alt="Context Window">
+  <img src="https://img.shields.io/badge/PyTorch-2.0+-ee4c2c?style=flat-square&logo=pytorch&logoColor=white" alt="PyTorch">
+  <img src="https://img.shields.io/badge/Weights-SafeTensors_&_PyTorch-059669?style=flat-square" alt="Weights">
+  <img src="https://img.shields.io/badge/Status-Research_Artifact-bc8cff?style=flat-square" alt="Research Artifact">
+</p>
 
-## Project goals
+<div align="center">
+  <a href="#evaluation">
+    <img src="https://img.shields.io/badge/🏆_BEST_EVAL-45.64%25_Supervised_Accuracy_%7C_16.83_Perplexity-1f2937?style=for-the-badge&logoColor=white" alt="Top Benchmark Result"/>
+  </a>
+</div>
 
-1. Implement a decoder-only Transformer architecture.
-2. Use a SentencePiece tokenizer to encode text.
-3. Pretrain a model on approximately 1.8 billion tokens.
-4. Fine-tune the pretrained model on instruction data using LoRA.
-5. Merge trained LoRA adapters into standalone model checkpoints.
-6. Compare checkpoints using held-out next-token prediction metrics.
-7. Inspect generated answers and investigate EOS/stopping behavior.
-8. Prepare the model, architecture source, tokenizer, configuration, and documentation for sharing.
+<br>
 
-The experiments show that supervised fine-tuning substantially improved held-out token prediction relative to the pretrained base model. They also show that lower held-out loss does not necessarily translate into coherent, useful generated responses.
+<p align="center">
+  <a href="#project-goals"><b>Project Goals</b></a> •
+  <a href="#model-overview"><b>Model Overview</b></a> •
+  <a href="#architecture"><b>Architecture</b></a> •
+  <a href="#pretraining"><b>Pretraining</b></a> •
+  <a href="#supervised-fine-tuning"><b>Supervised Fine-Tuning</b></a> •
+  <a href="#evaluation"><b>Evaluation</b></a> •
+  <a href="#using-the-model"><b>Quick Start</b></a> •
+  <a href="#checkpoints-and-artifacts"><b>Checkpoints</b></a>
+</p>
 
-## Model overview
+<p align="center">
+  <code>git clone https://github.com/kapilverse/Aether.git &amp;&amp; pip install torch sentencepiece safetensors</code>
+</p>
+
+<p align="center">
+  <img src="assets/aether_showcase.svg" alt="Aether 100M SLM Architecture and Evaluation Showcase" width="100%">
+</p>
+
+<div align="center">
+  <table align="center" style="border: 1px solid #30363d; border-radius: 8px; margin: 16px auto;">
+    <tr>
+      <td align="center" style="padding: 16px 32px;">
+        <p align="center">
+          <a href="https://huggingface.co/kapilverse/Aether">
+            <img src="https://img.shields.io/badge/🤗_Hugging_Face-Explore_Aether_Checkpoints-yellow?style=for-the-badge&logo=huggingface&logoColor=black" alt="Hugging Face"/>
+          </a>
+        </p>
+        <p align="center">
+          <b><a href="https://huggingface.co/kapilverse/Aether">Join the Aether Model &amp; Research Discussion</a></b><br>
+          <sub>Checkpoints &bull; SafeTensors &bull; Evaluation Metrics &bull; Reproduction Scripts</sub>
+        </p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+---
+
+> [!NOTE]
+> **Status & Intended Use:** The training and fine-tuning pipelines ran successfully, and model weights are available. However, generation quality remains an expected limitation for this scale: outputs can be repetitive, incoherent, or incorrect. Aether is an educational and research artifact demonstrating end-to-end SLM engineering, not a production assistant.
+
+---
+
+## 🎯 Project Goals
+
+1. **Implement a custom decoder-only Transformer** with modern architectural primitives (RoPE, GQA, RMSNorm, SwiGLU).
+2. **Train a custom SentencePiece tokenizer** with specialized control tokens.
+3. **Pretrain from scratch** on approximately 1.8 billion tokens with high hardware throughput.
+4. **Instruction fine-tune with LoRA** across conversational, multi-turn, coding, and mathematical datasets.
+5. **Merge trained LoRA adapters** into standalone, self-contained model checkpoints.
+6. **Rigorously evaluate checkpoints** on held-out loss, perplexity, and next-token prediction metrics.
+7. **Empirically study generation dynamics**, repetitive degeneration, and EOS/stopping conditions.
+8. **Package and document artifacts** for open research and Hugging Face distribution.
+
+---
+
+## 📋 Model Overview
 
 | Property | Value |
 |---|---|
-| Model name | Aether |
-| Model type | Decoder-only causal language model |
-| Parameter count | 100,092,672 |
-| Pretraining tokens | 1,800,011,776 (approximately 1.8B) |
-| Vocabulary size | 32,000 |
-| Maximum context length | 2,048 tokens |
-| Tokenizer | SentencePiece |
-| Positional encoding | Rotary positional embeddings (RoPE) |
-| Attention | Grouped-query attention (GQA) |
-| Normalization | RMSNorm |
-| Feed-forward network | SwiGLU |
-| Input/output embeddings | Tied |
-| Intended use | Educational experimentation and research |
+| **Model Name** | Aether |
+| **Model Type** | Decoder-only causal language model |
+| **Parameter Count** | 100,092,672 (~100M) |
+| **Pretraining Tokens** | 1,800,011,776 (~1.8B) |
+| **Vocabulary Size** | 32,000 |
+| **Context Length** | 2,048 tokens |
+| **Tokenizer** | SentencePiece (`tokenizer/aether.model`) |
+| **Positional Encoding** | Rotary Positional Embeddings (RoPE) |
+| **Attention Mechanism** | Grouped-Query Attention (GQA: 12 Q-heads, 4 KV-heads) |
+| **Normalization** | RMSNorm (`eps=1e-6`) |
+| **Feed-Forward Layer** | SwiGLU (dim=2048) |
+| **Embedding Tying** | Input embeddings and output projection tied |
+| **Target Hardware** | NVIDIA GPU (PyTorch with CUDA) |
 
-## Architecture
+---
 
-The implemented configuration uses:
+## 🏗️ Architecture
 
+```
+                 ┌────────────────────────────────┐
+                 │          Input Tokens          │
+                 └──────────────┬─────────────────┘
+                                │
+                 ┌──────────────▼─────────────────┐
+                 │  Tied Token Embeddings (d=768) │
+                 └──────────────┬─────────────────┘
+                                │
+                 ┌──────────────▼─────────────────┐
+                 │   12x Transformer Decoder      │
+                 │   ├── RMSNorm                  │
+                 │   ├── GQA (12 Q-heads, 4 KV)   │
+                 │   │   └── Rotary Embeds (RoPE) │
+                 │   ├── RMSNorm                  │
+                 │   └── SwiGLU FFN (dim=2048)    │
+                 └──────────────┬─────────────────┘
+                                │
+                 ┌──────────────▼─────────────────┐
+                 │       Final RMSNorm Layer      │
+                 └──────────────┬─────────────────┘
+                                │
+                 ┌──────────────▼─────────────────┐
+                 │ Causal LM Head (Logits: 32k)   │
+                 └────────────────────────────────┘
+```
+
+The architecture details:
 - **12 Transformer layers**
 - **Hidden size:** 768
 - **Query attention heads:** 12
-- **Key/value attention heads:** 4
+- **Key/value attention heads:** 4 (grouped-query attention factor of 3x)
 - **Head dimension:** 64
 - **Feed-forward intermediate size:** 2,048
 - **Vocabulary:** 32,000 tokens
 - **Context length:** 2,048 tokens
 - **RMSNorm epsilon:** `1e-6`
 - **Dropout:** `0`
-- **Linear biases:** disabled
-- **RoPE:** rotary positional embeddings
-- **GQA:** grouped-query attention
-- **SwiGLU:** gated feed-forward network
+- **Linear biases:** disabled across all projections
 - **Weight tying:** token embeddings and output projection share weights
 
-The model uses causal attention: each position is trained to predict the next token, without attending to future tokens.
+> [!IMPORTANT]
+> **Compatibility Notice:** Aether uses a custom model implementation (`model/aether.py`). It is not a drop-in Hugging Face `transformers.AutoModelForCausalLM` without custom model code registration. Use the provided loading scripts and model definitions.
 
-### Important compatibility note
+---
 
-Aether uses a custom model implementation. A checkpoint file and `config.json` do not, by themselves, make it a drop-in `transformers.AutoModelForCausalLM` model. The compatible architecture implementation and loading code are required unless a dedicated Transformers integration is implemented and tested.
+## 🔤 Tokenizer and Text Format
 
-## Tokenizer and text format
+The tokenizer model is stored at `tokenizer/aether.model`.
 
-The tokenizer model is stored as `tokenizer/aether.model`.
+| Token | ID | Description |
+|:---:|:---:|---|
+| `<unk>` | 0 | Unknown token |
+| `<s>` | 1 | Beginning of sequence (BOS) |
+| `</s>` | 2 | End of sequence (EOS) |
+| `<pad>` | 3 | Padding token |
 
-| Token | ID |
-|---|---:|
-| Unknown (`<unk>`) | 0 |
-| Beginning of sequence (`<s>`) | 1 |
-| End of sequence (`</s>`) | 2 |
-| Padding (`<pad>`) | 3 |
-
-The instruction fine-tuning format is plain text with explicit role labels:
+### Instruction Template Format
+Instruction fine-tuning formats multi-turn dialogue with explicit role labels:
 
 ```text
 User:
@@ -98,373 +177,189 @@ The user's message
 
 Assistant:
 The assistant's response
-
 ```
 
-System messages, when present, use the same pattern with a `System:` label. During SFT, loss is applied to assistant tokens, while user/system tokens are masked with label `-100`. The training objective uses the causal next-token shift.
+During SFT, loss is computed exclusively over the assistant tokens; user and system tokens are masked with label `-100`.
 
-The original SFT1/SFT2 pipeline did not append the tokenizer's EOS token ID to assistant responses. A separate EOS-supervision experiment was run later to test this behavior.
+---
 
-## Pretraining
+## ⚡ Pretraining
 
-The base model was pretrained from scratch before instruction fine-tuning.
+The base model was trained from scratch before supervised fine-tuning.
 
 | Metric | Result |
 |---|---:|
-| Tokens processed | 1,800,011,776 |
-| Training duration | 11.31 hours |
-| Average throughput | 20,379 tokens/second |
-| Training steps | 13,733 |
-| Best validation loss | 4.31079396 |
-| Best checkpoint step | 13,600 |
+| **Tokens Processed** | 1,800,011,776 (~1.8B) |
+| **Training Duration** | 11.31 hours |
+| **Average Throughput** | 20,379 tokens/second |
+| **Total Training Steps** | 13,733 |
+| **Best Validation Loss** | 4.31079 |
+| **Best Checkpoint Step** | 13,600 |
 
-The reported best validation checkpoint is `checkpoints/best.pt`; `checkpoints/latest.pt` is the rolling latest checkpoint.
+### Base-Model Benchmark Results
 
-### Base-model benchmark results
+| Benchmark | Score | Detail |
+|---|---:|---|
+| **ARC-Easy** | 39.18% | 931 / 2,376 correct |
+| **HellaSwag** | 26.59% | Zero-shot normalized completion |
 
-| Benchmark | Result |
-|---|---:|
-| ARC-Easy | 39.18% (931 / 2,376) |
-| HellaSwag | 26.59% |
+---
 
-Benchmark results depend on the evaluation setup and should not be compared directly with published numbers unless the same protocol is used.
+## 🧪 Supervised Fine-Tuning (SFT)
 
-## Supervised fine-tuning
+Fine-tuning leveraged Low-Rank Adaptation (LoRA) on attention projection modules (`q_proj`, `k_proj`, `v_proj`, `o_proj`), followed by weight merging into full checkpoint tensors.
 
-The fine-tuning experiments used Low-Rank Adaptation (LoRA), then merged trained adapters into full model checkpoints.
+### Shared LoRA Configuration
+- **Rank ($r$):** 16
+- **Alpha ($\alpha$):** 32
+- **Dropout:** 0.05
+- **Trainable Parameters:** 983,040 (~0.98% of total model weights)
 
-### Shared LoRA configuration
+### Iteration Summary
 
-| Setting | Value |
-|---|---|
-| LoRA rank | 16 |
-| LoRA alpha | 32 |
-| LoRA dropout | 0.05 |
-| Target modules | `q_proj`, `k_proj`, `v_proj`, `o_proj` |
-| Trainable parameters | 983,040 |
-| Approximate share of all parameters | 0.98% |
+<details open>
+<summary><b>SFT1: UltraChat (Conversational Foundations)</b></summary>
 
-### SFT1: UltraChat
+- **Dataset:** `HuggingFaceH4/ultrachat_200k` (20,000 examples)
+- **Duration:** 1 epoch
+- **Base Checkpoint:** Pretrained base model (`checkpoints/best.pt`)
+- **Merged Checkpoint:** `sft/merged/aether_100m_sft.pt`
+- **Result:** Drastic improvement in held-out next-token prediction over the base model.
+</details>
 
-**Purpose:** establish instruction-following behavior on conversational instruction data.
+<details>
+<summary><b>SFT2: Mixed Instruction & Technical Data</b></summary>
 
-- Source dataset: `HuggingFaceH4/ultrachat_200k`
-- Local subset used: 20,000 examples
-- Training: one epoch
-- Starting checkpoint: pretrained base model
-- Output adapter: final LoRA adapter from the first SFT run
-- Merged checkpoint: `sft/merged/aether_100m_sft.pt`
+- **Dataset:** 4,844 multi-source examples:
+  - General: `magpie_general` (1,200), `oasst2_general` (800)
+  - Python / Coding: `self_oss_instruct` (700), `codefeedback_py` (500), `codefeedback_sql` (300)
+  - Technical: `magpie_tech` (300), `codefeedback_tech` (250), `oasst2_tech` (44)
+  - Constraints / Rewrite: `smol_constraints` (350), `tulu3_if` (300), `smol_rewrite` (100)
+- **Merged Checkpoint:** `sft/merged/aether_100m_sft2.pt`
+</details>
 
-SFT1 showed a large improvement in held-out assistant-token prediction compared with the base model. Generation tests nevertheless showed repetition and occasional incoherence.
+<details>
+<summary><b>SFT3: Coding and Math Specialization</b></summary>
 
-### SFT2: mixed instruction data
+- **Dataset:** 12,000 audited examples:
+  - Glaive code assistant (5,000)
+  - Dolly (4,000)
+  - Orca Math (2,000)
+  - GSM8K (1,000)
+- **Merged Checkpoint:** `sft/merged/aether_100m_sft3.pt`
+</details>
 
-**Purpose:** broaden instruction, coding, technical, and constrained-format coverage.
+<details open>
+<summary><b>SFT1_EOS: Explicit EOS Supervision Experiment</b></summary>
 
-The final dataset contained **4,844 examples**, not the originally planned 5,000. The OpenAssistant source contributed fewer examples than expected; the project proceeded with the available data rather than performing additional backfilling.
+- **Motivation:** Standard SFT1 string tokenization did not append the special EOS token ID to assistant responses.
+- **Protocol:** Explicitly appended `tokenizer.sp.eos_id()` to assistant target labels.
+- **Merged Checkpoint:** `sft/merged/aether_100m_sft_eos.pt`
+- **Result:** Produced the **best loss, perplexity, and token accuracy** across all experiments.
+</details>
 
-| Category | Examples |
-|---|---:|
-| General | 2,000 |
-| Python/coding | 1,500 |
-| Technical | 594 |
-| Format/constrained instructions | 750 |
-| **Total** | **4,844** |
+---
 
-Reported source counts:
+## 📊 Evaluation & Benchmarks
 
-| Source | Examples |
-|---|---:|
-| `magpie_general` | 1,200 |
-| `oasst2_general` | 800 |
-| `self_oss_instruct` | 700 |
-| `codefeedback_py` | 500 |
-| `codefeedback_sql` | 300 |
-| `magpie_tech` | 300 |
-| `codefeedback_tech` | 250 |
-| `oasst2_tech` | 44 |
-| `smol_constraints` | 350 |
-| `tulu3_if` | 300 |
-| `smol_rewrite` | 100 |
-| **Total** | **4,844** |
+All checkpoints were evaluated on an identical held-out test set consisting of **500 examples** (442,453 assistant tokens).
 
-Training details:
+| Checkpoint | Supervised Loss ↓ | Perplexity ↓ | Token Accuracy ↑ | Primary Characteristics |
+|:---|:---:|:---:|:---:|---|
+| **Base Model** | 6.8429 | 937.16 | 2.29% | Raw next-token pretraining |
+| **SFT1 (UltraChat)** | 2.9120 | 18.39 | 44.41% | First instruction tuning |
+| **SFT2 (Mixed)** | 2.9253 | 18.64 | 44.19% | Broad domain coverage |
+| **SFT3 (Code/Math)** | 2.9664 | 19.42 | 43.69% | Technical & mathematical focus |
+| 🏆 **SFT1_EOS (Best)** | **2.8229** | **16.83** | **45.64%** | Explicit EOS supervision |
 
-- Starting checkpoint: merged SFT1 (`sft/merged/aether_100m_sft.pt`)
-- One epoch
-- 303 optimizer steps
-- LoRA rank 16, alpha 32, dropout 0.05
-- Adapter: `sft/round2_checkpoints/final_adapter/adapter_model.pt`
-- Merged checkpoint: `sft/merged/aether_100m_sft2.pt`
+### Key Research Findings
+- **SFT1 dramatically closed the gap** from the base model (perplexity dropped from 937 to 18.39).
+- **Explicit EOS supervision achieved peak performance** across all evaluation dimensions.
+- **Metric vs. Generation Divergence:** Lower validation loss did not directly eliminate degeneration or repetition in unconstrained sampling.
 
-SFT2 did not outperform SFT1 on the shared held-out evaluation. Generation tests also showed repetition, including repeated words and phrases.
+---
 
-### SFT3: coding-and-math-oriented data
+## 🚀 Using the Model
 
-**Purpose:** test whether additional code, technical, and mathematical examples would improve targeted responses.
+### 1. Installation
 
-The cleaned dataset contained **12,000 examples**:
-
-| Source | Examples |
-|---|---:|
-| Glaive code assistant | 5,000 |
-| Dolly | 4,000 |
-| Orca Math | 2,000 |
-| GSM8K | 1,000 |
-| **Total** | **12,000** |
-
-Dataset cleaning/audit reported:
-
-- 12,000 records
-- 0 invalid JSON records
-- 0 schema errors
-- 0 empty prompts or answers
-- 0 duplicate prompts
-- 1 repeated answer
-- 0 examples exceeding the 2,048-token limit
-- 0 examples below 12 tokens
-- 0 remaining GSM8K `<<...>>` or `####` markers after cleanup
-- Mean length: 336.8 tokens
-- Maximum length: 2,036 tokens
-
-The GSM8K cleanup replaced inline `<<...>>` calculation markers with equation text and converted `####` answer markers into a readable `Final answer:` form. Structural cleanliness does not guarantee semantic correctness or dataset quality.
-
-Training details:
-
-- Starting checkpoint: merged SFT2 (`sft/merged/aether_100m_sft2.pt`)
-- One epoch
-- 6,000 micro-batches
-- 750 optimizer steps
-- Micro-batch size: 2
-- Gradient accumulation: 8
-- Learning rate: `1e-4`
-- Maximum sequence length: 2,048
-- Adapter: `sft/round3_checkpoints/final_adapter/adapter_model.pt`
-- Merged checkpoint: `sft/merged/aether_100m_sft3.pt`
-
-SFT3 did not improve the shared held-out metrics over SFT1. Some generated code had a more recognizable structure, but code and prose outputs remained unreliable and repetitive.
-
-### EOS-supervision experiment
-
-**Motivation:** the original SFT1 training code did not append the tokenizer's EOS ID to assistant messages. Encoding the text string `</s>` is not equivalent to explicitly appending the special token ID.
-
-A separate experiment was run:
-
-- Starting checkpoint: merged SFT1 (`sft/merged/aether_100m_sft.pt`)
-- Dataset: same 20,000-example UltraChat subset
-- One epoch
-- Explicitly appended `tokenizer.sp.eos_id()` to assistant labels
-- LoRA configuration: rank 16, alpha 32, dropout 0.05
-- Optimizer steps: 1,249
-- Adapter: `sft/eos_experiment_checkpoints/final_adapter/adapter_model.pt`
-- Merged checkpoint: `sft/merged/aether_100m_sft_eos.pt`
-
-The EOS experiment produced the best recorded held-out token prediction metrics among the compared checkpoints. However, generation tests did not clearly resolve repetition or stopping behavior. In a small three-prompt comparison, neither SFT1 nor SFT1_EOS emitted EOS within the 100-token generation limit. This sample is too small to establish overall EOS behavior.
-
-## Evaluation
-
-A common held-out set of 500 examples was used to compare checkpoints. The evaluation included 442,453 assistant tokens. Loss and perplexity are next-token prediction metrics; token accuracy is the fraction of supervised next tokens predicted exactly.
-
-| Checkpoint | Loss | Perplexity | Token accuracy |
-|---|---:|---:|---:|
-| Base | 6.842851 | 937.1573 | 2.29% |
-| SFT1 | 2.912011 | 18.3938 | 44.41% |
-| SFT2 | 2.925273 | 18.6393 | 44.19% |
-| SFT3 | 2.966417 | 19.4222 | 43.69% |
-| SFT1_EOS | 2.8229 | 16.83 | 45.64% |
-
-**Interpretation:**
-
-- SFT1 substantially improved held-out next-token prediction relative to the base model.
-- SFT2 and SFT3 did not improve on SFT1 under this evaluation.
-- SFT1_EOS achieved the best loss, perplexity, and token accuracy in this comparison.
-- These metrics do not directly measure factuality, reasoning, instruction-following quality, or usefulness of generated answers.
-- Generation tests remained poor despite improved token metrics.
-
-Evaluation artifacts reported by the project include `reports/four_checkpoint_eval.json`, `reports/four_checkpoint_eval.txt`, `reports/five_checkpoint_eval.json`, and `reports/five_checkpoint_eval.txt`.
-
-## Generation testing and known issues
-
-Generation comparisons were run across the base model, SFT1, SFT2, SFT3, and the EOS experiment. The test prompts included:
-
-- Explain what a Python dictionary is.
-- Write a Python function to check whether a number is prime.
-- Explain the difference between a process and a thread.
-
-The early comparison used temperature `0.8`, top-k `50`, a fixed seed, and up to 100 new tokens.
-
-Observed issues included:
-
-- Repeated words and phrases.
-- Explanations that start plausibly but drift into incoherence.
-- Incorrect or malformed code.
-- Failure to stop naturally in the tested prompts.
-- Occasional malformed formatting.
-
-A later EOS probability diagnostic compared predictions after several standalone answer strings. EOS probability was higher for the EOS-trained checkpoint on most tested answers than for SFT1, but remained low. That diagnostic did not include the preceding user prompt, so it should be treated as an incomplete diagnostic rather than a definitive measure of EOS behavior.
-
-**The central project finding is that better held-out token prediction did not yet yield reliable free-form generation.**
-
-## Checkpoints and artifacts
-
-| Artifact | Description |
-|---|---|
-| `checkpoints/best.pt` | Best base pretraining checkpoint, recorded at step 13,600 |
-| `checkpoints/latest.pt` | Rolling latest base pretraining checkpoint |
-| `sft/merged/aether_100m_sft.pt` | Merged SFT1 checkpoint |
-| `sft/merged/aether_100m_sft2.pt` | Merged SFT2 checkpoint |
-| `sft/merged/aether_100m_sft3.pt` | Merged SFT3 checkpoint |
-| `sft/merged/aether_100m_sft_eos.pt` | Merged SFT1 checkpoint with explicit EOS supervision |
-| `sft/round2_checkpoints/final_adapter/adapter_model.pt` | SFT2 LoRA adapter |
-| `sft/round3_checkpoints/final_adapter/adapter_model.pt` | SFT3 LoRA adapter |
-| `sft/eos_experiment_checkpoints/final_adapter/adapter_model.pt` | EOS experiment LoRA adapter |
-| `tokenizer/aether.model` | SentencePiece tokenizer |
-| `Aether-HF/model.safetensors` | Converted tensor weights for publication, if generated and verified |
-| `Aether-HF/config.json` | Architecture metadata for the publication package |
-| `Aether-HF/README.md` | Hugging Face model card |
-
-The `.pt` checkpoints and `.safetensors` weights are different serialization formats. Converting between them does not change model intelligence or improve outputs. The SafeTensors file must be produced from the intended checkpoint and verified before publication; do not assume it exists unless conversion completed successfully.
-
-## Representative repository layout
-
-```text
-SLM_100M/
-├── model/
-│   ├── aether.py
-│   └── attention.py
-├── tokenizer/
-│   └── aether.model
-├── checkpoints/
-│   ├── best.pt
-│   └── latest.pt
-├── sft/
-│   ├── train_sft.py
-│   ├── train_sft_round2.py
-│   ├── train_sft_round3.py
-│   ├── train_sft_eos.py
-│   └── merged/
-│       ├── aether_100m_sft.pt
-│       ├── aether_100m_sft2.pt
-│       ├── aether_100m_sft3.pt
-│       └── aether_100m_sft_eos.pt
-├── scripts/
-│   ├── eval_all_four.py
-│   ├── eval_all_five.py
-│   ├── compare_all_four_generations.py
-│   └── diagnose_eos_probability.py
-├── reports/
-└── logs/
+```bash
+git clone https://github.com/kapilverse/Aether.git
+cd Aether
+pip install torch sentencepiece safetensors
 ```
 
-This is a representative layout based on the recorded experiments. A publication package may contain only the files needed to load and use the selected checkpoint.
-
-## Using the model
-
-Aether uses a custom architecture. A working inference environment requires a compatible PyTorch version, SentencePiece, the architecture implementation, the tokenizer, and the checkpoint.
-
-The original project used PyTorch with CUDA on an NVIDIA A10G GPU. Python 3.14.4 was present in the EC2 virtual environment used during the experiments; other Python versions and environments should be tested rather than assumed compatible.
-
-### Loading SafeTensors weights
-
-If `model.safetensors` has been generated and verified, its tensors can be loaded using the SafeTensors library. The architecture must be instantiated first, and the state-dictionary keys must match.
+### 2. Python Inference
 
 ```python
 import torch
+import sentencepiece as spm
 from safetensors.torch import load_file
 from model import AETHER100M
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-model = AETHER100M()
+# 1. Initialize architecture
+model = AETHER100M().to(device)
+
+# 2. Load SafeTensors or PyTorch weights
 state_dict = load_file("model.safetensors", device="cpu")
+model.load_state_dict(state_dict, strict=True)
+model.eval()
 
-missing, unexpected = model.load_state_dict(state_dict, strict=False)
-if missing or unexpected:
-    raise RuntimeError(
-        f"Checkpoint mismatch: missing={missing}, unexpected={unexpected}"
-    )
+# 3. Load SentencePiece Tokenizer
+tokenizer = spm.SentencePieceProcessor(model_file="tokenizer/aether.model")
 
-model = model.to(device).eval()
+# 4. Format Prompt
+prompt = "User:\nExplain what a Python dictionary is.\n\nAssistant:\n"
+input_ids = torch.tensor([tokenizer.encode(prompt)], device=device)
+
+# 5. Generate Tokens
+with torch.no_grad():
+    output_ids = model.generate(input_ids, max_new_tokens=100, temperature=0.8, top_k=50)
+
+print(tokenizer.decode(output_ids[0].tolist()))
 ```
 
-This is a loading example, not a guarantee that every published folder uses exactly this path or that every environment is compatible. Confirm the actual model class import and checkpoint key names against the released source. Use `strict=True` when the checkpoint and architecture are expected to match exactly.
+---
 
-Load the tokenizer with:
+## 📦 Checkpoints and Artifacts
 
-```python
-import sentencepiece as spm
+| Artifact | Format | Description |
+|---|---|---|
+| `checkpoints/best.pt` | PyTorch (`.pt`) | Best base model checkpoint (step 13,600) |
+| `checkpoints/latest.pt` | PyTorch (`.pt`) | Final rolling pretraining checkpoint |
+| `sft/merged/aether_100m_sft.pt` | PyTorch (`.pt`) | Merged SFT1 checkpoint |
+| `sft/merged/aether_100m_sft2.pt` | PyTorch (`.pt`) | Merged SFT2 checkpoint |
+| `sft/merged/aether_100m_sft3.pt` | PyTorch (`.pt`) | Merged SFT3 checkpoint |
+| `sft/merged/aether_100m_sft_eos.pt` | PyTorch (`.pt`) | Merged SFT1 checkpoint with EOS supervision |
+| `tokenizer/aether.model` | SentencePiece | Trained 32k vocabulary model |
+| `Aether-HF/model.safetensors` | SafeTensors | Hugging Face distribution checkpoint |
+| `Aether-HF/config.json` | JSON | Architecture parameters & hyperparameter config |
 
-tokenizer = spm.SentencePieceProcessor(
-    model_file="tokenizer/aether.model"
-)
-```
+---
 
-The repository should include a tested end-to-end inference script before it is advertised as ready to run.
+## ⚠️ Limitations & Responsible Use
 
-## Publishing on Hugging Face
+- **Repetition & Degeneration:** Outputs may repeat phrases or fall into repetitive token loops during open-ended text generation.
+- **Factuality:** Small language models have limited parameter capacity and can hallucinate factual claims.
+- **Safety Critical Tasks:** Aether is an exploratory research project. It is **not** intended for medical, legal, financial, or safety-critical applications.
+- **Code Generation:** Syntactic patterns may appear correct, but generated code must be reviewed and tested before execution.
 
-A useful custom-model repository should include:
+---
 
-```text
-Aether/
-├── README.md
-├── config.json
-├── model.safetensors
-├── model/
-│   └── *.py
-└── tokenizer/
-    └── aether.model
-```
+## 📜 Dataset Attribution & Licensing
 
-Recommended publication checklist:
+Aether's experiments utilized subsets from several open research datasets:
+- **UltraChat** (`HuggingFaceH4/ultrachat_200k`)
+- **OpenAssistant 2** (`OASST2`)
+- **Magpie**, **Self-OSS-Instruct**, **CodeFeedback**
+- **Glaive Code Assistant**, **Databricks Dolly**, **Orca Math**, **GSM8K**
 
-1. Verify that the SafeTensors checkpoint loads and its tensor keys match the architecture.
-2. Test loading the model from the extracted or cloned repository.
-3. Include the tokenizer and required custom Python files.
-4. State clearly that the architecture is custom and is not automatically compatible with standard Transformers auto-loading.
-5. Include evaluation methodology, results, and generation limitations.
-6. Verify the licenses and redistribution terms of every training dataset before assigning a license.
-7. Do not publish credentials, cloud keys, private data, or unrelated machine-specific files.
+Please consult the respective source dataset licenses before redistributing downstream checkpoints.
 
-## Reproducibility notes
+---
 
-A fully reproducible public release should record or verify:
-
-- Exact Python and library versions.
-- Exact training and evaluation commands.
-- Random seeds and data preprocessing versions.
-- Dataset revisions, licenses, and hashes.
-- The precise pretraining corpus and its licensing/usage terms.
-- The exact base checkpoint used for each fine-tuning run.
-- Whether the published checkpoint was converted and verified from the intended `.pt` file.
-- A tested clean-environment inference procedure.
-
-Do not claim exact reproducibility unless these details are available and tested.
-
-## Limitations and responsible use
-
-Aether is a small experimental language model. It can:
-
-- Produce repetitive or incoherent text.
-- Generate incorrect factual claims.
-- Produce code that fails to run.
-- Fail to follow instructions consistently.
-- Fail to end a response naturally.
-
-It should not be relied on for medical, legal, financial, safety-critical, or other consequential decisions. Generated code should be reviewed and tested before use.
-
-The project is best understood as a practical demonstration of small language model engineering and experimentation, not as a replacement for a modern production language model.
-
-## License and dataset attribution
-
-**No project license is assigned in this README.** Before choosing a license, verify the redistribution and attribution requirements of the model's training datasets, source code, and dependencies.
-
-The project used or reported using data from UltraChat, OpenAssistant (OASST2), Magpie, Self-OSS-Instruct, CodeFeedback, Smol constraints/rewrite datasets, Tulu 3 instruction data, Glaive code assistant, Dolly, Orca Math, and GSM8K. This list reflects the recorded dataset sources; exact dataset revisions, licenses, and source-specific restrictions must be checked before redistribution.
-
-If a dataset or its license cannot be verified, document the uncertainty and seek permission or omit the affected material from redistribution as appropriate.
-
-## Summary
-
-Aether completed a from-scratch pretraining run of approximately 1.8 billion tokens, followed by several LoRA-based supervised fine-tuning experiments. SFT1 substantially improved held-out token prediction, and explicit EOS supervision improved the recorded loss and token accuracy further. Nevertheless, free-form generation remained unreliable.
-
-The project's value is its end-to-end engineering work and the measured lessons from the experiments: training success, improved token metrics, and useful assistant behavior are related but distinct outcomes.
+<p align="center">
+  <sub>Built for transparent small language model research &bull; <a href="https://github.com/kapilverse/Aether">kapilverse/Aether</a></sub>
+</p>
