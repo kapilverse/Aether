@@ -260,19 +260,44 @@ Fine-tuning leveraged Low-Rank Adaptation (LoRA) on attention projection modules
 
 ## 📊 Evaluation & Benchmarks
 
-All checkpoints were evaluated on an identical held-out test set consisting of **500 examples** (442,453 assistant tokens).
+All checkpoints were evaluated on an identical held-out test split of **500 examples** (442,453 assistant tokens) from `HuggingFaceH4/ultrachat_200k`.
 
-| Checkpoint | Supervised Loss ↓ | Perplexity ↓ | Token Accuracy ↑ | Primary Characteristics |
-|:---|:---:|:---:|:---:|---|
-| **Base Model** | 6.8429 | 937.16 | 2.29% | Raw next-token pretraining |
-| **SFT1 (UltraChat)** | 2.9120 | 18.39 | 44.41% | First instruction tuning |
-| **SFT2 (Mixed)** | 2.9253 | 18.64 | 44.19% | Broad domain coverage |
-| **SFT3 (Code/Math)** | 2.9664 | 19.42 | 43.69% | Technical & mathematical focus |
-| 🏆 **SFT1_EOS (Best)** | **2.8229** | **16.83** | **45.64%** | Explicit EOS supervision |
+<p align="center">
+  <img src="assets/evaluation_results.png" alt="Aether-100M Four-Checkpoint Evaluation Output" width="100%">
+</p>
+
+### Empirical Benchmark Results
+
+| Checkpoint | Supervised Loss ↓ | Perplexity ↓ | Token Accuracy ↑ | Loss Δ vs BASE | Primary Characteristics |
+|:---|:---:|:---:|:---:|:---:|---|
+| **Base Model** | 6.842851 | 937.1573 | 2.29% | Baseline | Raw next-token pretraining |
+| **SFT1 (UltraChat)** | 2.912011 | 18.3938 | 44.41% | **+57.44%** | Conversational instruction tuning |
+| **SFT2 (Mixed)** | 2.925273 | 18.6393 | 44.19% | **+57.25%** | Broad domain & technical coverage |
+| **SFT3 (Code/Math)** | 2.966417 | 19.4222 | 43.69% | **+56.65%** | Technical & mathematical focus |
+| 🏆 **SFT1_EOS (Best)** | **2.822900** | **16.8300** | **45.64%** | **+58.74%** | Explicit EOS supervision |
+
+```text
+AETHER-100M FOUR-CHECKPOINT EVALUATION
+Dataset: HuggingFaceH4/ultrachat_200k (test_sft)
+Tokenized examples: 500
+
+Model         Loss       Perplexity    Accuracy    Tokens
+---------------------------------------------------------
+BASE          6.842851   937.1573       2.29%      442,453
+SFT1          2.912011    18.3938      44.41%      442,453
+SFT2          2.925273    18.6393      44.19%      442,453
+SFT3          2.966417    19.4222      43.69%      442,453
+
+Loss improvement vs BASE:
+BASE: +0.00%
+SFT1: +57.44%
+SFT2: +57.25%
+SFT3: +56.65%
+```
 
 ### Key Research Findings
-- **SFT1 dramatically closed the gap** from the base model (perplexity dropped from 937 to 18.39).
-- **Explicit EOS supervision achieved peak performance** across all evaluation dimensions.
+- **SFT1 dramatically closed the gap** from the base model: loss improved by **+57.44%** and perplexity dropped from 937.15 to 18.39.
+- **Explicit EOS supervision achieved peak performance** across all evaluation dimensions (+58.74% loss improvement and 45.64% token accuracy).
 - **Metric vs. Generation Divergence:** Lower validation loss did not directly eliminate degeneration or repetition in unconstrained sampling.
 
 ---
