@@ -22,11 +22,11 @@
   <img src="https://img.shields.io/badge/HuggingFace-kapilverse%2FAether-ffd21e?style=flat-square&logo=huggingface&logoColor=black" alt="Hugging Face">
 </p>
 
-<div align="center">
+<!-- <div align="center">
   <a href="#evaluation">
     <img src="https://img.shields.io/badge/Best_Eval-45.64%25_Supervised_Accuracy_%7C_16.83_Perplexity-1f2937?style=for-the-badge" alt="Top Benchmark Result"/>
   </a>
-</div>
+</div> -->
 
 <br>
 
@@ -45,9 +45,6 @@
   <code>git clone https://github.com/kapilverse/Aether.git &amp;&amp; pip install torch sentencepiece safetensors</code>
 </p>
 
-<p align="center">
-  <img src="assets/aether_showcase.svg" alt="Aether 100M SLM Architecture and Evaluation Showcase" width="100%">
-</p>
 
 <div align="center">
   <table align="center" style="border: 1px solid #30363d; border-radius: 8px; margin: 16px auto;">
